@@ -15,20 +15,20 @@ public enum OverlayItemAction {
 }
 
 public final class OverlayItem {
-    var title: String
-    var subtitle: String?
+    public var title: String
+    public var subtitle: String?
 
-    let action: OverlayItemAction
+    internal let action: OverlayItemAction
 
-    init(title: String, subtitle: String? = nil, action: OverlayItemAction) {
+    public init(title: String, subtitle: String? = nil, action: OverlayItemAction) {
         self.title = title
         self.subtitle = subtitle
         self.action = action
     }
 
-    var updateItem: ((OverlayItem) -> Void)?
+    internal var updateItem: ((OverlayItem) -> Void)?
 
-    func setNeedsToUpdateItem() {
+    public func setNeedsToUpdateItem() {
         updateItem?(self)
     }
 }
