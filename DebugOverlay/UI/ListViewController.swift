@@ -36,7 +36,9 @@ final class ListViewController: UIViewController {
         self.items = items
         super.init(nibName: nil, bundle: nil)
         navigationItem.title = "Debug Menu"
-        navigationItem.backButtonTitle = ""
+        if #available(iOS 11.0, *) {
+            navigationItem.backButtonTitle = ""
+        }
     }
 
     required init?(coder: NSCoder) {
