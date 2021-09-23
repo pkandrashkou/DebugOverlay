@@ -64,11 +64,7 @@ final class OverlayConfigurationExample: OverlayConfiguration {
     }()
 
     private lazy var appVersion: OverlayItem = {
-        #if ADHOC
-            var configuration: String = "Configuration: AdHoc"
-        #elseif DEBUG
-            var configuration: String = "Configuration: Debug"
-        #endif
+        var configuration: String = "Configuration: Debug"
         let item = OverlayItem(
             title: configuration,
             subtitle: "Version: \(Bundle.marketingVersion) Build: \(Bundle.buildVersion)",
