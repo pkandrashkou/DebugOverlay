@@ -37,7 +37,7 @@ final class OverlayViewController: UIViewController {
         return rootViewController.shouldAutorotate
     }
 
-    private var childViewController: UIViewController?
+    private var debugViewController: UIViewController?
     private var childShadowView: PassthroughView?
     private let configuration: OverlayConfiguration
 
@@ -51,7 +51,7 @@ final class OverlayViewController: UIViewController {
     }
 
     func toggleDebugMenu() {
-        if childViewController != nil {
+        if debugViewController != nil {
             hideDebugMenu()
         } else {
             showDebugMenu()
@@ -70,7 +70,7 @@ final class OverlayViewController: UIViewController {
         debugFrame.size.height = view.bounds.height * 0.6
 
         attachChild(navigation, frame: debugFrame)
-        childViewController = navigation
+        debugViewController = navigation
 
         debugMenu.closeAction = { [weak self] in
             self?.hideDebugMenu()
@@ -81,16 +81,16 @@ final class OverlayViewController: UIViewController {
     }
 
     func hideDebugMenu() {
-        guard let childViewController = childViewController else { return }
+        guard let childViewController = debugViewController else { return }
         detachChild(childViewController)
-        self.childViewController = nil
+        self.debugViewController = nil
     }
 }
 
 private extension OverlayViewController {
     @objc private func handlePanGesture(gesture: UIPanGestureRecognizer) {
         let translation = gesture.translation(in: view)
-        guard let child = childViewController else {
+        guard let child = debugViewController else {
             gesture.setTranslation(.zero, in: view)
             return
         }
@@ -107,7 +107,7 @@ private extension OverlayViewController {
             child.view.frame = frame
         }
         child.didMove(toParent: self)
-        childViewController = child
+        debugViewController = child
 
         let childShadowView = PassthroughView()
         childShadowView.backgroundColor = .white
@@ -138,9 +138,11 @@ private extension OverlayViewController {
 
 extension OverlayViewController: OverlayTouchDelegate {
     func shouldHandleTouch(at point: CGPoint) -> Bool {
+        guard let debugViewController = debugViewController else { return false }
+
         let pointInLocalCoordinates = view.convert(point, from: nil)
 
-        if childViewController?.view.frame.contains(pointInLocalCoordinates) == true {
+        if debugViewController.view.frame.contains(pointInLocalCoordinates) == true {
             return true
         }
 
